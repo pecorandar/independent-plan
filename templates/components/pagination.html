@@ -1,0 +1,30 @@
+<!-- independent_plan/templates/independent_plan/components/pagination.html -->
+
+<div class="pagination">
+ <ul>
+  <!-- 前のページに送る部分 1ページ目ならリンクなし -->
+  {% if current_page == 1 %}
+   <span class="pagination-link prev-off"><li><</li></span>
+  {% else %}
+   <a href="{% url 'independent_plan:index_with_page' current_page|add:'-1' %}" class="pagination-link"><li><</li></a>
+  {% endif %}
+
+	<!-- 数字の部分 -->
+  {% for num in num_page %}
+   <!-- 現在のページならリンクなし -->
+	 {% if num == current_page %}
+    <span class="pagination-link is-active"><li>{{ num }}</li></span>
+   {% else %}
+    <a href="{% url 'independent_plan:index_with_page' num %}" class="pagination-link"><li>{{ num }}</li></a>
+   {% endif %}
+  {% endfor %}
+
+	<!-- 次のページに送る部分 最後のページならリンクなし -->
+  {% if current_page == last_page %}
+   <span class="pagination-link next-off"><li>></li></span>
+
+  {% else %}
+   <a href="{% url 'independent_plan:index_with_page' current_page|add:'+1' %}" class="pagination-link"><li>></li></a>
+  {% endif %}
+ </ul>
+</div>

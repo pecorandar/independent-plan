@@ -1,0 +1,9 @@
+asgiref==3.5.0
+certifi==2020.6.20
+charset-normalizer==2.0.12
+Django==4.0.3
+django-distill==2.9.2
+idna==3.3
+requests==2.27.1
+sqlparse==0.4.2
+urllib3==1.26.9

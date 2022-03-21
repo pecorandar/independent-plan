@@ -1,0 +1,34 @@
+{% extends 'independent_plan/base.html' %}
+{% load static %}
+{% block meta_title %}{{ post.title }} - {{ block.super }}{% endblock %}
+{% block meta_description %}{{ post.description }}{% endblock %}
+{% block meta_keywords %}{{ post.keywords }}{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top:112px;">
+  <article class="post">
+    <p class="created-at">{{ post.createdAt }}</p>
+    <h1 class="post-title">
+      {{ post.title }}
+    </h1>
+    <div class="markdown-body">
+      {% autoescape off %}
+      {{ post.text }}
+      {% endautoescape %}
+    </div>
+  </article>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<!-- コードハイライト -->
+<link rel="style
+
+sheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/hybrid.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+<script type="text/javascript">
+  hljs.initHighlightingOnLoad();
+</script>
+{% endblock %}
