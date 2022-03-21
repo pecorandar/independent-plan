@@ -1,0 +1,27 @@
+beautifulsoup4==4.6.0
+brotlipy==0.7.0
+certifi==2021.5.30
+cffi @ file:///Users/runner/miniforge3/conda-bld/cffi_1625835327798/work
+charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1644853463426/work
+cryptography @ file:///Users/runner/miniforge3/conda-bld/cryptography_1634230548203/work
+Django==2.1.8
+django-modelcluster==4.4
+django-taggit==0.23.0
+django-treebeard==4.3.1
+djangorestframework @ file:///home/conda/feedstock_root/build_artifacts/djangorestframework_1596632844333/work
+draftjs-exporter==2.1.7
+html5lib @ file:///home/conda/feedstock_root/build_artifacts/html5lib_1592930327044/work
+idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1642433548627/work
+olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
+Pillow==5.4.1
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+pyOpenSSL @ file:///home/conda/feedstock_root/build_artifacts/pyopenssl_1643496850550/work
+PySocks @ file:///Users/runner/miniforge3/conda-bld/pysocks_1610291492528/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1633452062248/work
+requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1641580202195/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+Unidecode @ file:///home/conda/feedstock_root/build_artifacts/unidecode_1646918762405/work
+urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1647489083693/work
+wagtail==2.7
+webencodings==0.5.1
+Willow==1.1
