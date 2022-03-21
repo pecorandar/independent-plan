@@ -7,6 +7,8 @@ from django.http import Http404
 import math
 
 
+
+
 def post_list(request, **kwargs):
     """記事一覧"""
     limit = 2

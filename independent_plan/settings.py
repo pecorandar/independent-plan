@@ -16,27 +16,23 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 DEBUG = False
 # SECURITY WARNING: don't run with debug turned on in production!
 
 try:
-    from .local_settings import *
+    from local_settings import *
 except ImportError:
     pass
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 if not DEBUG:
-    SECRET_KEY = os.environ['API_KEY']
-    API_KEY = os.environ['BASE_URL']
-    BASE_URL = os.environ['SECRET_KEY']
-
+    SECRET_KEY = os.environ['SECRET_KEY']
+    API_KEY = os.environ['API_KEY']
+    BASE_URL = os.environ['BASE_URL']
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -81,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'independent_plan.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
@@ -91,7 +86,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -111,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -122,7 +115,6 @@ TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
