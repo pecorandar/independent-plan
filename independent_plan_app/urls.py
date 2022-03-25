@@ -27,6 +27,9 @@ def _tag_total_count():
                             headers=headers).json()['totalCount']
 
 
+def get_category():
+    return 
+
 def get_index():
     """
     トップページ
@@ -42,7 +45,15 @@ def get_posts():
     """
     post_total_count = _post_total_count()
     end_point = f'/post?limit={post_total_count}&fields=id'
+    print()
+    print(f'{post_total_count=}')
+    print(f'{end_point=}')
+    print()
     res = requests.request('GET', url=url + end_point, headers=headers)
+    print()
+    print()
+    print(res)
+    print()
     for data in res.json()['contents']:
         yield data['id']
 
@@ -93,6 +104,14 @@ urlpatterns = [
                  name='index',
                  distill_func=get_index,
                  distill_file='index.html'),
+
+    # カテゴリ別記事集ページ 第二のindexみたいな．
+    distill_path('category/<str:category>',\
+                 views.post_category,
+                 name='category',
+                 distill_func=get_category,
+                 distill_file='category_index.html'),
+
     # 記事詳細ページ
     distill_path('post/<slug:slug>/',
                  views.post_detail,
