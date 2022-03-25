@@ -5,6 +5,10 @@ import sys
 
 
 def main():
+    print()
+    print(os.curdir)
+    print()
+
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'independent_plan.settings')
     try:

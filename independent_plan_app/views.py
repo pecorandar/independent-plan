@@ -1,3 +1,4 @@
+from http.client import HTTPResponse
 from django.shortcuts import render
 
 from django.shortcuts import render
@@ -67,3 +68,7 @@ def post_detail(request, slug):
     }
 
     return render(request, 'independent_plan/post_detail.html', context)
+
+def index(reqest):
+    # H
+    return HTTPResponse('welcolme')
