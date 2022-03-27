@@ -49,7 +49,7 @@ def post_category(request, **kwargs):
     return render(request, 'independent_plan/index.html', context)
 
 
-def post_subcategory(request, category=None, subcategory=None, **kwargs):
+def post_subcategory(request, **kwargs):
     """記事一覧"""
 
     print('post_subcat', kwargs)
