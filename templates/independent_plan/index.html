@@ -1,44 +1,25 @@
 <!-- independent_plan_app/templates/independent_plan_app/index.html -->
 
-{% extends "independent_plan/base.html" %}
-{% load static %}
-{% block content %}
+{% extends "independent_plan/base.html" %} {% load static %} {% block content %}
 
 
 <div class="container" style="padding-top:112px;">
- {% for post in post_list %}
-  <article class="article">
-   <div class="thumbnail">
-    <a href="{% url 'independent_plan_app:post_detail' post.id %}">
-     {% if post.thumbnail %}
-      <img class="post-thumbnail" src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
-     {% else %}
-      <img class="post-thumbnail" src="{% static 'images/noimage.png' %}" alt="{{ post.title }}">
-     {% endif %}
-    </a>
-   </div>
-   <div class="detail">
-    <p class="created-at">{{ post.createdAt }}</p>
-    <a href="{% url 'independent_plan_app:post_detail' post.id %}">
-     <h1 class="post-title" style="margin-top:1rem;">{{ post.title }}</h1>
-    </a>
-    <p class="post-description">{{ post.description | linebreaks }}</p>
+    {% for cat_block in categories %}
+    <article class="article">
+        <div class="detail">
+        </div>
+        <a href="{% url 'independent_plan_app:category' cat_block.category.id %}">
+            <h1>{{ cat_block.category.category }}</h1>
+        </a>
+        {% for sub_cat in cat_block.sub_categories %}
+        <a href="{% url 'independent_plan_app:subcategory' cat_block.category.id sub_cat.id %}">
+            <h2>---{{ sub_cat.category }}</h2>
+            {{ cat_block.category.id }} {{ sub_cat.id }}
+        </a>
 
-    {% if post.tag %}
-    <div class="tag">
-      <span class="post-tag">Tags:</span>
-      {% for tag in post.tag %}
-       <span class="post-tag" style="margin-left:3px;">{{ tag.name }}</span>
-       {% if not forloop.last %}
-        <span style="margin:0 3px; color:#888">/</span>
-       {% endif %}
-      {% endfor %}
-    </div>
-    {% endif %}
-   </div>
-  </article>
- {% endfor %}
- {% include "components/pagination.html" %}
+        {% endfor %}
+    </article>
+    {% endfor %}
 </div>
 
 {% endblock %}

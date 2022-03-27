@@ -1,4 +1,5 @@
 from http.client import HTTPResponse
+from turtle import pos
 from django.shortcuts import render
 
 from django.shortcuts import render
@@ -8,18 +9,18 @@ from django.http import Http404
 import math
 
 
+from pprint import pprint
+
+
+
 def post_category(request, **kwargs):
     """カテゴリ一覧"""
-    limit = 10
-    current_page = kwargs.get('page', 1)
-    offset = (int(current_page) - 1) * limit
+    print('kwargs', kwargs)
+    print('kwargs', kwargs)
+    print('kwargs', kwargs)
 
-    end_point = f'/post?limit={limit}&offset={offset}'
 
-    # タグIDが渡された場合はエンドポイントを更新
-    tag_id = kwargs.get('tag_id', None)
-    if tag_id:
-        end_point += f'&filters=tag[contains]{tag_id}'
+    end_point = f'/category'
 
     url = getattr(settings, "BASE_URL", None)
     api_key = getattr(settings, "API_KEY", None)
@@ -27,7 +28,6 @@ def post_category(request, **kwargs):
     res = requests.request(method='GET',
                            url=url + end_point,
                            headers=headers)
-
     # タグの一覧を取得
     tags_res = requests.request(method='GET',
                                 url=url + '/tag',
@@ -36,23 +36,27 @@ def post_category(request, **kwargs):
     tag_list = tags_res.json()['contents']
     tag_list.sort(key=lambda x: x['name'])
 
-    total_count = res.json()['totalCount']
-    num_page = math.ceil(total_count / limit)
+    cats = res.json()['contents']
     context = {
-        'post_list': res.json()['contents'],
-        'num_page': range(1, num_page + 1),
-        'current_page': int(current_page),
-        'last_page': num_page,
+        'categories': [{'category': cat,
+                        'sub_categories': [sub_cat for sub_cat in cats 
+                                        if sub_cat.get('parentcategory') is not None \
+                                        and sub_cat.get('parentcategory').get('category') == cat.get('category')]}
+                            for cat in cats if cat.get('parentcategory') is None],
         # トップページの一覧用
         'tag_list': tag_list,
-        # ページャーの処理用
-        'tag_id': tag_id
     }
     return render(request, 'independent_plan/index.html', context)
 
 
-def post_list(request, **kwargs):
+def post_subcategory(request, category=None, subcategory=None, **kwargs):
     """記事一覧"""
+
+    print('post_subcat', kwargs)
+    print('post_subcat', kwargs)
+    print('post_subcat', kwargs)
+    print('post_subcat', kwargs)
+    
     limit = 10
     current_page = kwargs.get('page', 1)
     offset = (int(current_page) - 1) * limit
@@ -67,9 +71,6 @@ def post_list(request, **kwargs):
     url = getattr(settings, "BASE_URL", None)
     api_key = getattr(settings, "API_KEY", None)
     headers = {'X-MICROCMS-API-KEY': api_key}
-    res = requests.request(method='GET',
-                           url=url + end_point,
-                           headers=headers)
 
     # タグの一覧を取得
     tags_res = requests.request(method='GET',
@@ -79,10 +80,35 @@ def post_list(request, **kwargs):
     tag_list = tags_res.json()['contents']
     tag_list.sort(key=lambda x: x['name'])
 
+    # とりあえずcategoryなし以外のpostを持ってくる．
+    end_point += '&filters=category[exists]'
+    res = requests.request(method='GET',
+                           url=url + end_point,
+                           headers=headers)
+    
+
+    cat_id = kwargs.get('category')
+    sub_cat_id = kwargs.get('sabcategory')
+
+
+    posts_list = res.json()['contents']
+    if sub_cat_id is not None:
+        # sub_catがある場合，自身のカテゴリのidがsub_catと一致するpostのみ
+        post_list = [post for post in posts_list
+                        if post.get('category').get('id') == sub_cat_id]
+    else:
+        # subがない場合，自身のカテゴリか，自身のカテゴリの親カテゴリのidがcatに一致するpost
+        post_list = [post for post in posts_list
+                        if post.get('category').get('id') == cat_id or (
+                            isinstance(post.get('category').get('parentcategory'), dict) \
+                            and post.get('category').get('parentcategory').get('id') == cat_id)]
+    
     total_count = res.json()['totalCount']
     num_page = math.ceil(total_count / limit)
+
     context = {
-        'post_list': res.json()['contents'],
+        'cat_title': cat_id,
+        'post_list': post_list,
         'num_page': range(1, num_page + 1),
         'current_page': int(current_page),
         'last_page': num_page,
@@ -91,7 +117,7 @@ def post_list(request, **kwargs):
         # ページャーの処理用
         'tag_id': tag_id
     }
-    return render(request, 'independent_plan/index.html', context)
+    return render(request, 'independent_plan/category_index.html', context)
 
 
 def post_detail(request, slug):
@@ -110,6 +136,3 @@ def post_detail(request, slug):
 
     return render(request, 'independent_plan/post_detail.html', context)
 
-def index(reqest):
-    # H
-    return HTTPResponse('welcolme')
