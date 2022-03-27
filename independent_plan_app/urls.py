@@ -5,9 +5,11 @@ from django.conf import settings
 import requests
 import math
 
+from pprint import pprint 
+
 app_name = 'independent_plan_app'
 
-limit = 2  # 一覧ページに表示する記事数
+limit = 10  # 一覧ページに表示する記事数
 url = getattr(settings, "BASE_URL", None)
 api_key = getattr(settings, "API_KEY", None)
 headers = {'X-MICROCMS-API-KEY': api_key}
@@ -27,6 +29,30 @@ def _tag_total_count():
                             headers=headers).json()['totalCount']
 
 
+def get_category():
+    res = requests.request(method='GET',
+                            url=url + '/category',
+                            headers=headers)
+    
+    for data in res.json()['contents']:
+        if data['parentcategory'] is not None:
+            continue
+        yield data['category']
+
+
+def get_subcategory():
+    print('get_category ' * 10)
+    res = requests.request(method='GET',
+                            url=url + '/category',
+                            headers=headers)
+    for cat in get_category():
+        for data in res.json()['contents']:
+            if data['parentcategory'] is None:
+                continue
+            if data['parentcategory']["category"] == cat:
+                yield {'category': cat, 'subcategory': data['category']}
+
+
 def get_index():
     """
     トップページ
@@ -40,9 +66,10 @@ def get_posts():
     記事詳細ページを生成するためのpost idを返す
 
     """
-    post_total_count = _post_total_count()
+    post_total_count = _post_total_count() 
     end_point = f'/post?limit={post_total_count}&fields=id'
-    res = requests.request('GET', url=url + end_point, headers=headers)
+    res = requests.request('GET', url=url + end_point, headers=headers) 
+
     for data in res.json()['contents']:
         yield data['id']
 
@@ -86,28 +113,39 @@ def get_tags():
 
 
 urlpatterns = [
-    # path('', views.post_list, name='index'),
-    # トップページの普通の記事一覧
-    distill_path('',
-                 views.post_list,
+    # トップページ カテゴリのindex.
+    distill_path('', 
+                 views.post_category,
                  name='index',
-                 distill_func=get_index,
                  distill_file='index.html'),
+
+    # カテゴリ サブカテゴリindex. そのカテゴリの記事．
+    distill_path('category/<str:category>',
+                 views.post_subcategory,
+                 name='category',
+                 distill_func=get_category),
+
+    # 　サブカテゴリindex.
+    distill_path('subcategory/<str:category>/<str:subcategory>',
+                 views.post_subcategory,
+                 name='subcategory',
+                 distill_func=get_subcategory),
+
     # 記事詳細ページ
     distill_path('post/<slug:slug>/',
                  views.post_detail,
                  name='post_detail',
                  distill_func=get_posts),
+
     # ページを指定した記事一覧
     distill_path('page/<str:page>/',
-                 views.post_list,
+                 views.post_subcategory,
                  name='index_with_page',
-                 distill_func=get_pages,
-                 ),
+                 distill_func=get_pages),
+
     # タグを指定した記事一覧
     distill_path('tag/<str:tag_id>/page/<str:page>/',
-                 views.post_list,
+                 views.post_subcategory,
                  name='index_with_tag',
-                 distill_func=get_tags
-                 ),
+                 distill_func=get_tags),
 ]
