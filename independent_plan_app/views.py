@@ -14,9 +14,9 @@ from pprint import pprint
 
 def post_category(request, **kwargs):
     """カテゴリ一覧"""
+    print()
     print('kwargs', kwargs)
-    print('kwargs', kwargs)
-    print('kwargs', kwargs)
+    print()
 
 
     end_point = f'/category'
@@ -56,8 +56,8 @@ def post_subcategory(request, category=None, subcategory=None, page=1, tag_id=No
         'page': page,
         'tag_id': tag_id
     }
-    print('post_subcat', kwargs)
-    print('post_subcat', kwargs)
+    print()
+    print()
     print('post_subcat', kwargs)
     print('post_subcat', kwargs)
     
@@ -89,18 +89,30 @@ def post_subcategory(request, category=None, subcategory=None, page=1, tag_id=No
     res = requests.request(method='GET',
                            url=url + end_point,
                            headers=headers)
-    
 
     cat_id = kwargs.get('category')
-    sub_cat_id = kwargs.get('sabcategory')
-
+    sub_cat_id = kwargs.get('subcategory')
 
     posts_list = res.json()['contents']
     if sub_cat_id is not None:
+        print()
+        print(f'subcategory_id: {sub_cat_id} を表示')
+        print()
         # sub_catがある場合，自身のカテゴリのidがsub_catと一致するpostのみ
         post_list = [post for post in posts_list
                         if post.get('category').get('id') == sub_cat_id]
+        print(f'category_id = {sub_cat_id} のpost')
+        for p in posts_list:
+            print(p.get('title'), ':', p.get('category').get('id'), end='  >  ')
+            if p.get('category').get('id') == sub_cat_id:
+                print(p)
+            else:
+                print('no match')
+                
     else:
+        print()
+        print(f'category_id: {cat_id} を表示')
+        print()
         # subがない場合，自身のカテゴリか，自身のカテゴリの親カテゴリのidがcatに一致するpost
         post_list = [post for post in posts_list
                         if post.get('category').get('id') == cat_id or (

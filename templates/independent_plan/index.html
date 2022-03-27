@@ -14,7 +14,7 @@
         {% for sub_cat in cat_block.sub_categories %}
         <a href="{% url 'independent_plan_app:subcategory' cat_block.category.id sub_cat.id %}">
             <h2>---{{ sub_cat.category }}</h2>
-            {{ cat_block.category.id }} {{ sub_cat.id }}
+            ---{{ cat_block.category.id }} {{ sub_cat.id }}
         </a>
 
         {% endfor %}
