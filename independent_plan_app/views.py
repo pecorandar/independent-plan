@@ -1,5 +1,4 @@
 from http.client import HTTPResponse
-from turtle import pos
 from django.shortcuts import render
 
 from django.shortcuts import render
