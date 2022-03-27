@@ -120,13 +120,13 @@ urlpatterns = [
                  distill_file='index.html'),
 
     # カテゴリ サブカテゴリindex. そのカテゴリの記事．
-    distill_path('category/<str:category>',
+    distill_path('category/<str:category>/',
                  views.post_subcategory,
                  name='category',
                  distill_func=get_category),
 
     # 　サブカテゴリindex.
-    distill_path('subcategory/<str:category>/<str:subcategory>',
+    distill_path('subcategory/<str:category>/<str:subcategory>/',
                  views.post_subcategory,
                  name='subcategory',
                  distill_func=get_subcategory),
