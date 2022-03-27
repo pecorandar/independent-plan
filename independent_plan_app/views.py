@@ -1,3 +1,4 @@
+from email import header
 from http.client import HTTPResponse
 from django.shortcuts import render
 
@@ -57,15 +58,14 @@ def post_subcategory(request, category=None, subcategory=None, page=1, tag_id=No
         'tag_id': tag_id
     }
     print()
+    print('post_subcat', kwargs)
     print()
-    print('post_subcat', kwargs)
-    print('post_subcat', kwargs)
     
     limit = 10
     current_page = kwargs.get('page', 1)
     offset = (int(current_page) - 1) * limit
 
-    end_point = f'/post?limit={limit}&offset={offset}'
+    end_point = f'/post?limit={limit}&offset={offset}&depth=2'
 
     # タグIDが渡された場合はエンドポイントを更新
     tag_id = kwargs.get('tag_id', None)
@@ -90,40 +90,57 @@ def post_subcategory(request, category=None, subcategory=None, page=1, tag_id=No
                            url=url + end_point,
                            headers=headers)
 
-    cat_id = kwargs.get('category')
-    sub_cat_id = kwargs.get('subcategory')
+    # cat, cat_subの名前から，それらのidを取得する．subカテゴリだと同じものがある可能性がある．
+    # cat名は違うはず．
+    cat_name = kwargs.get('category')
+    sub_cat_name = kwargs.get('subcategory')
+
+    # print(url + f'/category?filters=category[equals]python')
+    # cat_id = requests.request(method='GET',
+    #                           url=url + f'/category?filters=category[equals]{cat_name}&fields=id',
+    #                         #   url=url + f'/category?filters=category[equals]python',
+    #                           headers=headers).json()['contents'][0].get('id')
+    # # subcat_idはcat_idも一致してないとNG．クエリでsub.parentcat.idってできないので，ひとまずcatに一致するもの持ってくる．
+    # sub_cat_id = requests.request(method='GET',
+    #                               url=url + f'/category?filters=category[equals]{cat_name}',
+    #                               headers=headers).json()['contents'][0]
+
+    # print(f'カテゴリ名[ {cat_name} ] のid取得 id: {cat_id}')
+    # print(f'カテゴリ{cat_name}のカテゴリ')
+    
 
     posts_list = res.json()['contents']
-    if sub_cat_id is not None:
+    if sub_cat_name is  None:
         print()
-        print(f'subcategory_id: {sub_cat_id} を表示')
+        print(f'category_id: {cat_name} を表示')
         print()
-        # sub_catがある場合，自身のカテゴリのidがsub_catと一致するpostのみ
+        # subがない場合，自身のカテゴリか，自身のカテゴリの親カテゴリのnameがcatに一致するpost
         post_list = [post for post in posts_list
-                        if post.get('category').get('id') == sub_cat_id]
-        print(f'category_id = {sub_cat_id} のpost')
+                        if post.get('category').get('category') == cat_name or (
+                            isinstance(post.get('category').get('parentcategory'), dict) \
+                            and post.get('category').get('parentcategory').get('category') == cat_name)]
+    else:
+        print()
+        print(f'subcategory_id: {sub_cat_name} を表示')
+        print()
+        # sub_catがある場合，親カテゴリも一致してないとx．
+        post_list = [post for post in posts_list
+                        if post['category']['category'] == sub_cat_name \
+                            and isinstance(post['category']['parentcategory'], dict) \
+                                and post['category']['parentcategory']['category'] == cat_name]
+        print(f'post 一覧．　serarch  category_id = {sub_cat_name}')
         for p in posts_list:
-            print(p.get('title'), ':', p.get('category').get('id'), end='  >  ')
-            if p.get('category').get('id') == sub_cat_id:
-                print(p)
+            print(p.get('title'), ':', p.get('category').get('category'), end='  >  ')
+            if p.get('category').get('category') == sub_cat_name:
+                print(' !!! bingo !!!')
             else:
                 print('no match')
                 
-    else:
-        print()
-        print(f'category_id: {cat_id} を表示')
-        print()
-        # subがない場合，自身のカテゴリか，自身のカテゴリの親カテゴリのidがcatに一致するpost
-        post_list = [post for post in posts_list
-                        if post.get('category').get('id') == cat_id or (
-                            isinstance(post.get('category').get('parentcategory'), dict) \
-                            and post.get('category').get('parentcategory').get('id') == cat_id)]
-    
     total_count = res.json()['totalCount']
     num_page = math.ceil(total_count / limit)
 
     context = {
-        'cat_title': cat_id,
+        'cat_title': cat_name,
         'post_list': post_list,
         'num_page': range(1, num_page + 1),
         'current_page': int(current_page),
