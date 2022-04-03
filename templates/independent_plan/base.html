@@ -11,13 +11,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="{% block meta_keywords %}Django,microCMS,ブログ{% endblock %}">
     <meta name="description" content="{% block meta_description %}DjangoとmicroCMSで作ったブログです{% endblock %}">
-    <title>{% block meta_title %}Pecoraの自立化計画{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% block extrahead %} {% endblock %}
+    <title>{% block meta_title %}Pecoraの巣立ち計画{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extrahead %} {% endblock %}
 </head>
 
 <body>
     {% include 'components/layout-header.html' %}
+    <p class="border-red">hgehoge</p>
+    <div id="test"></div>
+    <script>
+        const test = document.getElementById('test')
+    </script>
+
     <svg xmlns="http://www.w3.org/2000/svg" width="410.278" height="77.719" viewBox="0 0 410.278 77.719" style="fill: rgb(161, 222, 162);">
     <path id="home-follw.svg" class="cls-1" d="M939.476,538.276V525.267H901.32v74.8h13.916V569.453h23.118V556.444H915.236V538.276h24.24Zm81.584,24.448a39.111,39.111,0,1,0-39.053,38.8A38.975,38.975,0,0,0,1021.06,562.724Zm-13.8,0c0,14.018-11,25.906-25.253,25.906-14.141,0-25.251-11.888-25.251-25.906s11-26.018,25.251-26.018S1007.26,548.706,1007.26,562.724Zm54.2,37.345v-12.9h-22.78v-61.9h-13.92v74.8h36.7Zm49.37,0v-12.9h-22.78v-61.9h-13.91v74.8h36.69Zm87.53-37.345a39.111,39.111,0,1,0-39.05,38.8A38.968,38.968,0,0,0,1198.36,562.724Zm-13.8,0c0,14.018-11,25.906-25.25,25.906-14.14,0-25.25-11.888-25.25-25.906s11-26.018,25.25-26.018S1184.56,548.706,1184.56,562.724Zm127.03-37.457h-14.25l-13.13,52.261-12.68-52.261h-10.1l-12.91,52.261-13.02-52.261h-14.25l21.89,74.8h10.99l12.35-49.457,12.23,49.457h11Z" transform="translate(-901.312 -523.812)"></path>
   </svg>

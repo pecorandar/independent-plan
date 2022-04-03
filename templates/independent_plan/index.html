@@ -1,6 +1,7 @@
 <!-- independent_plan_app/templates/independent_plan_app/index.html -->
 
-{% extends "independent_plan/base.html" %} {% load static %} {% block content %}
+{% extends "independent_plan/base.html" %}
+{% load static %} {% block content %}
 
 
 <div class="container" style="padding-top:112px;">
@@ -12,7 +13,7 @@
             <h1>{{ cat_block.category.category }}</h1>
         </a>
         {% for sub_cat in cat_block.sub_categories %}
-        <a href="{% url 'independent_plan_app:subcategory' category=cat_block.category.id subcategory=sub_cat.category %}">
+        <a href="{% url 'independent_plan_app:subcategory' category=cat_block.category.category subcategory=sub_cat.category %}">
             <h2>---{{ sub_cat.category }}</h2>
         </a>
 

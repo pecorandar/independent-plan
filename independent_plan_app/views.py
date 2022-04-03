@@ -2,7 +2,6 @@ from email import header
 from http.client import HTTPResponse
 from django.shortcuts import render
 
-from django.shortcuts import render
 import requests
 from django.conf import settings
 from django.http import Http404
@@ -90,24 +89,8 @@ def post_subcategory(request, category=None, subcategory=None, page=1, tag_id=No
                            url=url + end_point,
                            headers=headers)
 
-    # cat, cat_subの名前から，それらのidを取得する．subカテゴリだと同じものがある可能性がある．
-    # cat名は違うはず．
     cat_name = kwargs.get('category')
     sub_cat_name = kwargs.get('subcategory')
-
-    # print(url + f'/category?filters=category[equals]python')
-    # cat_id = requests.request(method='GET',
-    #                           url=url + f'/category?filters=category[equals]{cat_name}&fields=id',
-    #                         #   url=url + f'/category?filters=category[equals]python',
-    #                           headers=headers).json()['contents'][0].get('id')
-    # # subcat_idはcat_idも一致してないとNG．クエリでsub.parentcat.idってできないので，ひとまずcatに一致するもの持ってくる．
-    # sub_cat_id = requests.request(method='GET',
-    #                               url=url + f'/category?filters=category[equals]{cat_name}',
-    #                               headers=headers).json()['contents'][0]
-
-    # print(f'カテゴリ名[ {cat_name} ] のid取得 id: {cat_id}')
-    # print(f'カテゴリ{cat_name}のカテゴリ')
-    
 
     posts_list = res.json()['contents']
     if sub_cat_name is  None:
